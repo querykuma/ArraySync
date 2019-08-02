@@ -37,7 +37,7 @@ Array.prototype.mapSync = async function (callback, batchSize = 1) { // eslint-d
       // eslint-disable-next-line require-await,no-unused-vars,no-loop-func
       const promises = batch_ary.map(async (currentValue, index, array) => callback(currentValue, index_total + index, this));
       // eslint-disable-next-line no-await-in-loop
-      result_ary.push(await Promise.all(promises));
+      result_ary.push(...await Promise.all(promises));
 
       index_total += batch_ary.length;
       batch_ary = [];
@@ -50,13 +50,9 @@ Array.prototype.mapSync = async function (callback, batchSize = 1) { // eslint-d
     // eslint-disable-next-line require-await,no-unused-vars
     const promises = batch_ary.map(async (currentValue, index, array) => callback(currentValue, index_total + index, this));
     // eslint-disable-next-line no-await-in-loop
-    result_ary.push(await Promise.all(promises));
+    result_ary.push(...await Promise.all(promises));
   }
 
-  if (typeof result_ary.flat === "function") {
-    return result_ary.flat();
-  }
-  /* Node.js < version 11 does not support flat() */
-  return [].concat(...result_ary);
+  return result_ary;
 
 };
