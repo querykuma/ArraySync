@@ -2,7 +2,7 @@
 
 /**
  * [Syntax]
- * await arr.forEachSync(async function callback(currentValue [, index [, array]]), batchSize);
+ * await arr.forEachSync(async function callback(currentValue [, index [, array]])[, batchSize]);
  *
  * [Parameters]
  * callback : async function to execute on each element

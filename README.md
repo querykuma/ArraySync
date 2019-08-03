@@ -5,14 +5,24 @@ The forEachSync and mapSync are synchronous Array functions for the asynchronous
 
 ## Syntax:
 
-- `await arr.forEachSync(async function callback(currentValue [, index [, array]]), batchSize);`
-- `var new_array = await arr.mapSync(async function callback(currentValue[, index[, array]]) { Return element for new_array }, batchSize);`
+```javascript
+await arr.forEachSync(async function callback(currentValue [, index [, array]])[, batchSize]);
+```
+
+```javascript
+var new_array = await arr.mapSync(async function callback(currentValue[, index[, array]]) {
+    // Return element for new_array
+}[, batchSize]);
+```
 
 
 ## Features:
 
-- They can (a)wait for the asynch functions.
-- If optional batchSize >= 2, each element goes in parallel by the size of array batch. But each batch goes in sequential. It is the middle of parallel and sequential.
+- They can (a)wait for the asynch functions in forEach and map.
+- The optional batchSize is the size of sub-array where each element goes in parallel in a batch.
+- If the optional batchSize == 1(default), each element goes in sequential.
+- If the optional batchSize <= 0, each element goes in parallel.
+- If the optional batchSize >= 2, each element goes in parallel by the size of array batch. But each batch goes in sequential. It is the middle of parallel and sequential.
 
 
 ## Sample program:
@@ -20,7 +30,6 @@ The forEachSync and mapSync are synchronous Array functions for the asynchronous
 ### forEachSync
 
 ```javascript
-
 var sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 var ary = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -32,16 +41,14 @@ var ary = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   console.log("forEachSync end");
 })();
-
 ```
 
-It goes in sequential by the array batch `[1,2,3]`, `[4,5,6]`, `[7,8,9]`, `[10]`.
+It goes in sequential by the array batch `[1,2,3]`, `[4,5,6]`, `[7,8,9]`, `[10]` with batchSize 3.
 
 
 ### mapSync
 
 ```javascript
-
 var sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay));
 var ary = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -57,11 +64,11 @@ var ary = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   });
   console.log("mapSync", ary_result);
 })();
-
 ```
 
-The "mapSync first" goes in sequential by the array batch `[1,2,3]`, `[4,5,6]`, `[7,8,9]`, `[10]`.
-The "mapSync second" goes in sequential by the array batch `[11]`, `[12]`, `[13]`, `[14]`, `[15]`, `[16]`, `[17]`, `[18]`, `[19]`, `[20]`.
+The "mapSync first" goes in sequential by the array batch `[1,2,3]`, `[4,5,6]`, `[7,8,9]`, `[10]` with batchSize 3.
+
+The "mapSync second" goes in sequential by the array batch `[11]`, `[12]`, `[13]`, `[14]`, `[15]`, `[16]`, `[17]`, `[18]`, `[19]`, `[20]` with batchSize 1.
 
 
 ## License:

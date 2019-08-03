@@ -4,7 +4,7 @@
  * [Syntax]
  * var new_array = await arr.mapSync(async function callback(currentValue[, index[, array]]) {
  *     // Return element for new_array
- * }, batchSize);
+ * }[, batchSize]);
  *
  * [Parameters]
  * callback : async function that produces an element of the new Array
